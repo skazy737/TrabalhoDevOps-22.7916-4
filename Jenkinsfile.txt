@@ -1,0 +1,74 @@
+pipeline {
+    agent any  // Pode ser qualquer agente disponível, como o master ou um agente específico do Jenkins
+
+    environment {
+        // Variáveis de ambiente do Docker
+        DOCKER_IMAGE = 'devops-flask_app'
+        DOCKER_TAG = 'latest'
+        DOCKER_REGISTRY = 'docker.io'  // Docker Hub, mas pode ser outro
+        DOCKER_USERNAME = credentials('docker-username')  // Credenciais do Docker Hub armazenadas no Jenkins
+        DOCKER_PASSWORD = credentials('docker-password')  // Credenciais do Docker Hub armazenadas no Jenkins
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout do código no repositório Git
+                git branch: 'main', url: 'https://github.com/usuario/nome-do-repositorio.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                // Cria a imagem Docker com base no Dockerfile
+                script {
+                    echo 'Construindo a imagem Docker...'
+                    sh 'docker build -t $DOCKER_IMAGE:$DOCKER_TAG .'
+                }
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                // Roda os testes da aplicação Flask (exemplo com unittest)
+                script {
+                    echo 'Executando testes...'
+                    sh 'docker run --rm $DOCKER_IMAGE:$DOCKER_TAG python -m unittest discover tests/'
+                }
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                // Push da imagem Docker para um repositório (ex: Docker Hub)
+                script {
+                    echo 'Fazendo login no Docker...'
+                    sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+
+                    echo 'Fazendo push da imagem Docker...'
+                    sh 'docker push $DOCKER_IMAGE:$DOCKER_TAG'
+                }
+            }
+        }
+
+        stage('Cleanup') {
+            steps {
+                // Limpar os containers após os testes
+                script {
+                    echo 'Removendo containers...'
+                    sh 'docker system prune -f'
+                }
+            }
+        }
+    }
+
+    post {
+        // Etapas pós-execução
+        success {
+            echo 'Pipeline executada com sucesso!'
+        }
+        failure {
+            echo 'Houve um erro, por favor verifique os logs.'
+        }
+    }
+}

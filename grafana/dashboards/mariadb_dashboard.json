@@ -7,7 +7,7 @@
   "version": 3,
   "panels": [
     {
-      "type": "time_series",
+      "type": "graph",
       "title": "Estado dos Nodes Prometheus",
       "datasource": "Prometheus",
       "gridPos": {
@@ -36,7 +36,7 @@
       }
     },
     {
-      "type": "time_series",
+      "type": "graph",
       "title": "Conexões MariaDB Ativas",
       "datasource": "Prometheus",
       "gridPos": {
@@ -69,7 +69,7 @@
       }
     },
     {
-      "type": "time_series",
+      "type": "graph",
       "title": "Uso de CPU Prometheus (1m Rate)",
       "datasource": "Prometheus",
       "gridPos": {
@@ -92,7 +92,7 @@
       }
     },
     {
-      "type": "time_series",
+      "type": "graph",
       "title": "Uso de Memória (Prometheus)",
       "datasource": "Prometheus",
       "gridPos": {
@@ -115,7 +115,7 @@
       }
     },
     {
-      "type": "time_series",
+      "type": "graph",
       "title": "Tempo Médio de Resposta MariaDB",
       "datasource": "Prometheus",
       "gridPos": {

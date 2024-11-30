@@ -1,0 +1,4 @@
+[client]
+user=root
+password=senha_do_root
+host=mariadb

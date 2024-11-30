@@ -1,0 +1,147 @@
+{
+  "uid": "devops_dashboard",
+  "title": "Painel DevOps para Banco de Dados",
+  "tags": ["DevOps", "Monitoramento"],
+  "timezone": "browser",
+  "schemaVersion": 16,
+  "version": 3,
+  "panels": [
+    {
+      "type": "time_series",
+      "title": "Estado dos Nodes Prometheus",
+      "datasource": "Prometheus",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 7
+      },
+      "targets": [
+        {
+          "expr": "up",
+          "legendFormat": "Status Node ({{instance}})",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "showPoints": "always"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      }
+    },
+    {
+      "type": "time_series",
+      "title": "Conexões MariaDB Ativas",
+      "datasource": "Prometheus",
+      "gridPos": {
+        "x": 0,
+        "y": 7,
+        "w": 12,
+        "h": 7
+      },
+      "targets": [
+        {
+          "expr": "mysql_global_status_threads_connected",
+          "legendFormat": "Conexões (Ativas)",
+          "refId": "B"
+        }
+      ],
+      "options": {
+        "fillOpacity": 50
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "count",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "value": null, "color": "green" },
+              { "value": 100, "color": "red" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "time_series",
+      "title": "Uso de CPU Prometheus (1m Rate)",
+      "datasource": "Prometheus",
+      "gridPos": {
+        "x": 12,
+        "y": 7,
+        "w": 12,
+        "h": 7
+      },
+      "targets": [
+        {
+          "expr": "rate(process_cpu_seconds_total[1m])",
+          "legendFormat": "CPU {{instance}}",
+          "refId": "C"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent"
+        }
+      }
+    },
+    {
+      "type": "time_series",
+      "title": "Uso de Memória (Prometheus)",
+      "datasource": "Prometheus",
+      "gridPos": {
+        "x": 0,
+        "y": 14,
+        "w": 12,
+        "h": 7
+      },
+      "targets": [
+        {
+          "expr": "process_resident_memory_bytes",
+          "legendFormat": "Memória Usada ({{instance}})",
+          "refId": "D"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes"
+        }
+      }
+    },
+    {
+      "type": "time_series",
+      "title": "Tempo Médio de Resposta MariaDB",
+      "datasource": "Prometheus",
+      "gridPos": {
+        "x": 12,
+        "y": 14,
+        "w": 12,
+        "h": 7
+      },
+      "targets": [
+        {
+          "expr": "rate(mysql_global_status_seconds_since_slow_log[1m])",
+          "legendFormat": "Tempo (s) - {{instance}}",
+          "refId": "E"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s"
+        }
+      }
+    }
+  ],
+  "refresh": "15s",
+  "time": {
+    "from": "now-2h",
+    "to": "now"
+  },
+  "overwrite": true
+}
